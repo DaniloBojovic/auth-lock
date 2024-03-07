@@ -10,9 +10,16 @@ import { LoginComponent } from './user/login/login.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { LogoutModule } from './user/logout/logout.module';
 import { AdminComponent } from './user/admin/admin.component';
+import { AdminFormComponent } from './user/admin/admin-form/admin-form.component';
 
 @NgModule({
-  declarations: [AppComponent, RegisterComponent, LoginComponent, AdminComponent],
+  declarations: [
+    AppComponent,
+    RegisterComponent,
+    LoginComponent,
+    AdminComponent,
+    AdminFormComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
