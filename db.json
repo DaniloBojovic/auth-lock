@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "username": "user1",
+      "password": "password1",
+      "id": 1,
+      "role": "User"
+    },
+    {
+      "username": "user2",
+      "password": "password2",
+      "id": 2,
+      "role": "User"
+    },
+    {
+      "username": "admin",
+      "password": "admin",
+      "id": 3,
+      "role": "Admin"
+    }
+  ],
+  "login": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+}

@@ -1,0 +1,73 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="username">Username:</label>
+    <input id="username" formControlName="username" type="text" />
+    <div *ngIf="registerForm.controls['username'].errors">
+      <p *ngIf="registerForm.controls['username'].errors['required']">
+        Username is required.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label for="email">Email:</label>
+    <input id="email" formControlName="email" type="email" />
+    <div
+      *ngIf="
+        registerForm.controls['email'].touched &&
+        registerForm.controls['email'].invalid &&
+        registerForm.controls['email'].errors
+      "
+    >
+      <p *ngIf="registerForm.controls['email'].errors['email']">
+        Email is required.
+      </p>
+      <p *ngIf="registerForm.controls['email'].errors['email']">
+        Please enter a valid email.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label for="password">Password:</label>
+    <input id="password" formControlName="password" type="password" />
+  </div>
+
+  <div>
+    <label for="confirmPassword">Confirm Password:</label>
+    <input
+      id="confirmPassword"
+      formControlName="confirmPassword"
+      type="password"
+    />
+    <div *ngIf="registerForm.controls['confirmPassword'].errors">
+      <p *ngIf="registerForm.controls['confirmPassword'].errors['mustMatch']">
+        Passwords must match.
+      </p>
+    </div>
+  </div>
+
+  <div formGroupName="address">
+    <div>
+      <label for="street">Street:</label>
+      <input id="street" formControlName="street" type="text" />
+    </div>
+
+    <div>
+      <label for="city">City:</label>
+      <input id="city" formControlName="city" type="text" />
+    </div>
+
+    <div>
+      <label for="state">State:</label>
+      <input id="state" formControlName="state" type="text" />
+    </div>
+
+    <div>
+      <label for="zip">Zip:</label>
+      <input id="zip" formControlName="zip" type="text" />
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="!registerForm.valid">Register</button>
+</form>
