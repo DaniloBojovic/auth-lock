@@ -1,35 +1,56 @@
 <div class="container">
   <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()">
-    <div
-      formArrayName="questions"
-      *ngFor="let question of questions.controls; let i = index"
-      class="question-group"
-    >
-      <div [formGroupName]="i" class="card">
-        <label for="question" class="form-label">Question</label>
+    <label for="applicantName" class="form-label">Applicant Name</label>
+    <input
+      id="applicantName"
+      formControlName="applicantName"
+      type="text"
+      class="form-control"
+    />
+
+    <div formArrayName="jobs">
+      <div *ngFor="let job of jobs.controls; let i = index" [formGroupName]="i">
+        <label for="jobTitle" class="form-label">Job Title</label>
         <input
-          id="question"
-          formControlName="question"
+          id="jobTitle"
+          formControlName="jobTitle"
           type="text"
           class="form-control"
         />
-        <label for="answer" class="form-label">Answer</label>
+        <label for="company" class="form-label">Company</label>
         <input
-          id="answer"
-          formControlName="answer"
+          id="company"
+          formControlName="company"
           type="text"
           class="form-control"
         />
-        <button type="button" (click)="removeQuestion(i)" class="btn-danger">
-          Remove
-        </button>
+        <label for="yearsOfExperience" class="form-label"
+          >Years of Experience</label
+        >
+        <input
+          id="yearsOfExperience"
+          formControlName="yearsOfExperience"
+          type="number"
+          class="form-control"
+        />
+        <button type="button" (click)="removeJob(i)">Remove Job</button>
       </div>
+      <button type="button" (click)="addJob()">Add Job</button>
     </div>
-    <button type="button" (click)="addQuestion()" class="btn-primary">
-      Add Question
-    </button>
-    <button type="submit" [disabled]="!dynamicForm.valid" class="btn-submit">
-      Submit
-    </button>
+
+    <div formArrayName="skills">
+      <div *ngFor="let skill of skills.controls; let i = index">
+        <label for="skill" class="form-label">Skill</label>
+        <input
+          id="skill"
+          [formControlName]="i"
+          type="text"
+          class="form-control"
+        />
+        <button type="button" (click)="removeSkill(i)">Remove Skill</button>
+      </div>
+      <button type="button" (click)="addSkill()">Add Skill</button>
+    </div>
+    <button type="submit" [disabled]="!dynamicForm.valid">Submit</button>
   </form>
 </div>

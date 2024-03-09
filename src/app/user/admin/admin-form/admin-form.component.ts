@@ -11,25 +11,40 @@ export class AdminFormComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.dynamicForm = this.formBuilder.group({
-      questions: this.formBuilder.array([]),
+      applicantName: ['', Validators.required],
+      jobs: this.formBuilder.array([]),
+      skills: this.formBuilder.array([]),
     });
   }
 
-  get questions() {
-    return this.dynamicForm.get('questions') as FormArray;
+  get jobs() {
+    return this.dynamicForm.get('jobs') as FormArray;
   }
 
-  addQuestion() {
-    this.questions.push(
+  get skills() {
+    return this.dynamicForm.get('skills') as FormArray;
+  }
+
+  addJob() {
+    this.jobs.push(
       this.formBuilder.group({
-        question: ['', Validators.required],
-        answer: ['', Validators.required],
+        jobTitle: ['', Validators.required],
+        company: ['', Validators.required],
+        yearsOfExperience: ['', Validators.required],
       })
     );
   }
 
-  removeQuestion(index: number) {
-    this.questions.removeAt(index);
+  addSkill() {
+    this.skills.push(this.formBuilder.control('', Validators.required));
+  }
+
+  removeJob(index: number) {
+    this.jobs.removeAt(index);
+  }
+
+  removeSkill(index: number) {
+    this.skills.removeAt(index);
   }
 
   onSubmit() {
