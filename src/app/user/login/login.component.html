@@ -2,7 +2,12 @@
   <div>
     <label for="username">Username:</label>
     <input id="username" formControlName="username" type="text" />
-    <div *ngIf="loginForm.controls['username'].errors">
+    <div
+      *ngIf="
+        loginForm.controls['username'].touched &&
+        loginForm.controls['username'].errors
+      "
+    >
       <p *ngIf="loginForm.controls['username'].errors['required']">
         Username is required.
       </p>
@@ -11,7 +16,12 @@
   <div>
     <label for="password">Password:</label>
     <input id="password" formControlName="password" type="password" />
-    <div *ngIf="loginForm.controls['password'].errors">
+    <div
+      *ngIf="
+        loginForm.controls['username'].touched &&
+        loginForm.controls['password'].errors
+      "
+    >
       <p *ngIf="loginForm.controls['password'].errors['required']">
         Password is required.
       </p>
