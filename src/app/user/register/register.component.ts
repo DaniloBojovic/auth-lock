@@ -23,13 +23,7 @@ export class RegisterComponent implements OnInit {
           street: ['', Validators.required],
           city: ['', Validators.required],
           state: ['', Validators.required],
-          zip: [
-            '',
-            [
-              Validators.required,
-              Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$'),
-            ],
-          ], // US zip code validation
+          zip: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]], // Serbian postal code validation
         }),
       },
       { validator: this.MustMatch('password', 'confirmPassword') }
