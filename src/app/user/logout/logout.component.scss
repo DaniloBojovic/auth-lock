@@ -1,7 +1,11 @@
+@import "src/_variables.scss";
+@import "src/_mixins.scss";
+
 button {
+  @include fade-in(0.5s); // Use the mixin here
   margin-left: 10px;
   padding: 10px 20px;
-  background-color: #dc3545; // Red color for logout
+  background-color: $logout-btn-color; // Use the variable here
   color: white;
   border: none;
   border-radius: 4px;

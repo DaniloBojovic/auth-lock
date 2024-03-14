@@ -39,6 +39,11 @@ export class UserService {
     this.router.navigate(['/login']);
   }
 
+  register(user: any) {
+    //implement register logic
+    return this.http.post<any>(this.apiUrlToken + '/register', user);
+  }
+
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError('Something bad happened; please try again later.');

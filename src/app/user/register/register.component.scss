@@ -1,4 +1,7 @@
+@import "src/_mixins.scss";
+
 form {
+  @include fade-in(1s);
   display: flex;
   flex-direction: column;
   width: 300px;

@@ -1,0 +1,15 @@
+// src/_mixins.scss
+@mixin fade-in($duration: 1s) {
+  animation-name: fade-in;
+  animation-duration: $duration;
+  animation-fill-mode: both;
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
