@@ -41,6 +41,7 @@ export class UserService {
 
   register(user: any) {
     //implement register logic
+    debugger;
     return this.http.post<any>(this.apiUrlToken + '/register', user);
   }
 

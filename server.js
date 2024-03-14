@@ -61,5 +61,20 @@ server.post("/login", (req, res) => {
   }
 });
 
+server.post("/register", (req, res) => {
+  const { username, password, role } = req.body;
+
+  // Check if user already exists
+  const existingUser = router.db.get("users").find({ username }).value();
+  if (existingUser) {
+    return res.status(400).json({ message: "User already exists" });
+  }
+
+  // Create new user
+  const newUser = { username, password, role };
+  router.db.get("users").push(newUser).write();
+  res.status(201).json({ message: "User created successfully" });
+});
+
 server.use(router);
 server.listen(3000, () => console.log("Server running on port 3000"));
