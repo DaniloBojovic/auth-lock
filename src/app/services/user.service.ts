@@ -7,13 +7,16 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://jsonplaceholder.typicode.com/users';
+  public apiUrl = 'https://jsonplaceholder.typicode.com/users';
   private apiUrlToken = 'http://localhost:3000';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   getUsers() {
-    return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
+    //return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
+    return this.http
+      .get<any>('http://localhost:3000/users')
+      .pipe(catchError(this.handleError));
   }
 
   login(user: { username: string; password: string }) {
@@ -47,6 +50,6 @@ export class UserService {
 
   private handleError(error: any) {
     console.error('An error occurred:', error);
-    return throwError('Something bad happened; please try again later.');
+    return throwError(error);
   }
 }

@@ -18,11 +18,20 @@ let db = new sqlite3.Database("./users.db", (err) => {
   console.log("Connected to the SQLite database.");
 });
 
+// Drop the existing users table
+db.run(`DROP TABLE IF EXISTS users`, (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+});
+
+// Create the users table
 db.run(`CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY,
   username TEXT,
   password TEXT,
-  role TEXT
+  role TEXT,
+  email TEXT
   )`),
   (err) => {
     if (err) {
@@ -32,14 +41,38 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
 
 // Insert rows into the users table
 let users = [
-  { username: "user1", password: "password1", id: 1, role: "User" },
-  { username: "user2", password: "password2", id: 2, role: "User" },
-  { username: "admin", password: "admin", id: 3, role: "Admin" },
+  {
+    username: "user1",
+    password: "password1",
+    id: 1,
+    role: "User",
+    email: "user1@example.com",
+  },
+  {
+    username: "user2",
+    password: "password2",
+    id: 2,
+    role: "User",
+    email: "user2@example.com",
+  },
+  {
+    username: "admin",
+    password: "admin",
+    id: 3,
+    role: "Admin",
+    email: "admin@example.com",
+  },
 ];
 
-let stmt = db.prepare("INSERT OR REPLACE INTO users VALUES (?, ?, ?, ?)");
+let stmt = db.prepare("INSERT OR REPLACE INTO users VALUES (?, ?, ?, ?, ?)");
 for (let i = 0; i < users.length; i++) {
-  stmt.run(users[i].id, users[i].username, users[i].password, users[i].role);
+  stmt.run(
+    users[i].id,
+    users[i].username,
+    users[i].password,
+    users[i].role,
+    users[i].email
+  );
 }
 stmt.finalize();
 
@@ -50,6 +83,17 @@ db.all("SELECT * FROM users", [], (err, rows) => {
   }
   rows.forEach((row) => {
     console.log(`Row: ${row.id} ${JSON.stringify(row)}`);
+  });
+});
+
+server.get("/users", (req, res) => {
+  db.all("SELECT * FROM users", [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    console.log("Rows:", rows);
+    res.json(rows);
   });
 });
 

@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, catchError, delay, finalize, tap, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  delay,
+  finalize,
+  of,
+  tap,
+  throwError,
+} from 'rxjs';
 import { UserService } from '../services/user.service';
 import { StateService } from '../services/state.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-list',
@@ -19,11 +28,27 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    debugger;
     this.loading = true;
-    this.users$ = this.userService.getUsers().pipe(
-      delay(2000),
-      finalize(() => (this.loading = false))
-    );
+    this.userService
+      .getUsers()
+      .pipe(
+        delay(2000),
+        finalize(() => (this.loading = false))
+      )
+      .subscribe(
+        (users) => (this.users$ = of(users)),
+        (error: HttpErrorResponse) => {
+          console.error('An error occurred:', error);
+          if (error.status === 404) {
+            console.error('Not Found');
+          }
+        }
+      );
+    // this.users$ = this.userService.getUsers().pipe(
+    //   delay(2000),
+    //   finalize(() => (this.loading = false))
+    // );
     // this.users$.subscribe((users) => {
     //   console.log(users);
     // });
