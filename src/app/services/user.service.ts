@@ -27,9 +27,10 @@ export class UserService {
 
   getUsers(): Observable<any[]> {
     debugger;
-    return this.http
-      .get<any[]>(`${this.apiUrl}/users`)
-      .pipe(tap((users) => this.userSubject.next(users)));
+    return this.http.get<any[]>(`${this.apiUrl}/users`).pipe(
+      tap((users) => this.userSubject.next(users)),
+      catchError(this.handleError)
+    );
   }
 
   login(user: { username: string; password: string }) {

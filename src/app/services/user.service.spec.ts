@@ -7,6 +7,7 @@ import {
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import * as e from 'cors';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -30,8 +31,20 @@ describe('UserService', () => {
 
   it('should retrieve users from API via GET', () => {
     const dummyUsers = [
-      { id: 1, name: 'John' },
-      { id: 2, name: 'Doe' },
+      {
+        username: 'user2',
+        password: 'password2',
+        id: 2,
+        role: 'User',
+        email: 'user2@example.com',
+      },
+      {
+        username: 'admin',
+        password: 'admin',
+        id: 3,
+        role: 'Admin',
+        email: 'admin@example.com',
+      },
     ];
 
     userService.getUsers().subscribe((users) => {
@@ -39,28 +52,34 @@ describe('UserService', () => {
       expect(users).toEqual(dummyUsers);
     });
 
-    const request = httpMock.expectOne(`${userService.apiUrl}`);
-    expect(request.request.method).toBe('GET');
-    request.flush(dummyUsers);
-  });
+    const requests = httpMock.match(`${userService.apiUrl}/users`);
+    expect(requests.length).toEqual(2);
 
-  xit('should handle error when API call fails', () => {
-    const errorMessage = new HttpErrorResponse({
-      error: 'test 404 error',
-      status: 404,
-      statusText: 'Not Found',
+    requests.forEach((request) => {
+      expect(request.request.method).toBe('GET');
+      request.flush(dummyUsers);
     });
 
-    userService.getUsers().subscribe(
-      () => fail('should have failed with 404 error'),
-      (error: HttpErrorResponse) => {
-        expect(error.status).toEqual(404);
-        expect(error.error).toContain('test 404 error');
-      }
-    );
+    // requests[0].flush(dummyUsers);
+    // requests[1].flush(dummyUsers);
+  });
 
-    const request = httpMock.expectOne(`${userService.apiUrl}`);
-    expect(request.request.method).toBe('GET');
-    request.flush('test 404 error', { status: 404, statusText: 'Not Found' });
+  it('should authenticate user via POST', () => {
+    const dummyUser = { username: 'user2', password: 'password2' };
+    const dummyResponse = { token: '123', role: 'User' };
+
+    userService.login(dummyUser).subscribe((res) => {
+      expect(res).toEqual(dummyResponse);
+      expect(localStorage.getItem('token')).toBe('123');
+      expect(localStorage.getItem('role')).toBe('User');
+    });
+
+    const loginRequest = httpMock.expectOne(`${userService.apiUrl}/login`);
+    expect(loginRequest.request.method).toBe('POST');
+    loginRequest.flush(dummyResponse);
+
+    const getUsersRequest = httpMock.expectOne(`${userService.apiUrl}/users`);
+    expect(getUsersRequest.request.method).toBe('GET');
+    getUsersRequest.flush([]);
   });
 });
