@@ -26,8 +26,8 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.userService
-      .getUsers()
+    debugger;
+    this.userService.users$
       .pipe(
         delay(2000),
         finalize(() => (this.loading = false))
@@ -41,6 +41,22 @@ export class UserListComponent implements OnInit {
           }
         }
       );
+
+    // this.userService
+    //   .getUsers()
+    //   .pipe(
+    //     delay(2000),
+    //     finalize(() => (this.loading = false))
+    //   )
+    //   .subscribe(
+    //     (users) => (this.users$ = of(users)),
+    //     (error: HttpErrorResponse) => {
+    //       console.error('An error occurred:', error);
+    //       if (error.status === 404) {
+    //         console.error('Not Found');
+    //       }
+    //     }
+    //   );
     // this.users$ = this.userService.getUsers().pipe(
     //   delay(2000),
     //   finalize(() => (this.loading = false))

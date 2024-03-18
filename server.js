@@ -132,64 +132,6 @@ server.post("/login", (req, res) => {
   );
 });
 
-// close the database
-// db.close((err) => {
-//   if (err) {
-//     console.error(err.message);
-//   }
-//   console.log("Close the database connection.");
-// });
-
-// Sample user credentials for demonstration purposes
-// const users1 = [
-//   {
-//     username: "user1",
-//     password: "password1",
-//     id: 1,
-//   },
-//   {
-//     username: "user2",
-//     password: "password2",
-//     id: 2,
-//   },
-//   {
-//     username: "admin",
-//     password: "admin",
-//     id: 3,
-//   },
-// ];
-
-// old code
-// server.post("/login", (req, res) => {
-//   const { username, password } = req.body;
-
-//   const users = router.db.get("users").value();
-//   console.log("Users:", users);
-
-//   const user = users.find(
-//     (u) => u.username === username && u.password === password
-//   );
-
-//   if (user) {
-//     // Generate JWT token
-//     const token = jwt.sign(
-//       { userId: user.id, role: user.role },
-//       process.env.JWT_SECRET,
-//       {
-//         expiresIn: "1h",
-//       }
-//     );
-//     res.status(200).json({
-//       userId: user.id,
-//       token: token,
-//       role: user.role,
-//     });
-//   } else {
-//     res.status(401).json({ message: "Invalid username or password" });
-//   }
-// });
-
-// new code
 server.post("/register", (req, res) => {
   const { username, password, email, role } = req.body;
 
@@ -212,28 +154,28 @@ server.post("/register", (req, res) => {
             console.error(err.message);
             return res.status(500).json({ message: "Internal server error" });
           }
-          res.status(201).json({ message: "User created successfully" });
+          //res.status(201).json({ message: "User created successfully" });
+          // Get the newly created user
+          db.get(
+            `SELECT * FROM users WHERE username = ?`,
+            [username],
+            (err, newUser) => {
+              if (err) {
+                console.error(err.message);
+                return res
+                  .status(500)
+                  .json({ message: "Internal server error" });
+              }
+
+              // Return the newly created user
+              res.status(201).json(newUser);
+            }
+          );
         }
       );
     }
   });
 });
-
-// old code
-// server.post("/register", (req, res) => {
-//   const { username, password, role } = req.body;
-
-//   // Check if user already exists
-//   const existingUser = router.db.get("users").find({ username }).value();
-//   if (existingUser) {
-//     return res.status(400).json({ message: "User already exists" });
-//   }
-
-//   // Create new user
-//   const newUser = { username, password, role };
-//   router.db.get("users").push(newUser).write();
-//   res.status(201).json({ message: "User created successfully" });
-// });
 
 server.use(router);
 server.listen(3000, () => console.log("Server running on port 3000"));
