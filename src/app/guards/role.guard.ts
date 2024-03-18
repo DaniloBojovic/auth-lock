@@ -15,7 +15,6 @@ export class RoleGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    debugger;
     const expectedRole = route.data['role'];
     const currentRole = localStorage.getItem('role');
 

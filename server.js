@@ -102,7 +102,7 @@ server.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   db.get(
-    `SELECT * FROM users WHERE username = ? AND password = ?`,
+    `SELECT username, password, email FROM users WHERE username = ? AND password = ?`,
     [username, password],
     (err, row) => {
       if (err) {
@@ -113,7 +113,7 @@ server.post("/login", (req, res) => {
       if (user) {
         // Generate JWT token
         const token = jwt.sign(
-          { userId: user.id, role: user.role },
+          { userId: user.id, role: user.role, email: user.email },
           process.env.JWT_SECRET,
           {
             expiresIn: "1h",
@@ -123,6 +123,7 @@ server.post("/login", (req, res) => {
           userId: user.id,
           token: token,
           role: user.role,
+          email: user.email,
         });
       } else {
         res.status(401).json({ message: "Invalid username or password" });
@@ -165,8 +166,6 @@ server.post("/login", (req, res) => {
 //   const users = router.db.get("users").value();
 //   console.log("Users:", users);
 
-//   debugger;
-
 //   const user = users.find(
 //     (u) => u.username === username && u.password === password
 //   );
@@ -192,7 +191,7 @@ server.post("/login", (req, res) => {
 
 // new code
 server.post("/register", (req, res) => {
-  const { username, password, role } = req.body;
+  const { username, password, email, role } = req.body;
 
   // Check if user already exists
   db.get(`SELECT * FROM users WHERE username = ?`, [username], (err, row) => {
@@ -206,8 +205,8 @@ server.post("/register", (req, res) => {
     } else {
       // Create new user
       db.run(
-        `INSERT INTO users (username, password, role) VALUES (?, ?, ?)`,
-        [username, password, role],
+        `INSERT INTO users (username, password, email) VALUES (?, ?, ?)`,
+        [username, password, email],
         (err) => {
           if (err) {
             console.error(err.message);

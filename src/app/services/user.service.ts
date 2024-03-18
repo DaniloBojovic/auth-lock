@@ -21,7 +21,6 @@ export class UserService {
 
   login(user: { username: string; password: string }) {
     //return this.http.get<any>('assets/db.json');
-    debugger;
     return this.http
       .post<any>('http://localhost:3000/login', {
         username: user.username,
@@ -29,7 +28,6 @@ export class UserService {
       })
       .pipe(
         tap((res) => {
-          debugger;
           localStorage.setItem('token', res.token);
           localStorage.setItem('role', res.role);
         })

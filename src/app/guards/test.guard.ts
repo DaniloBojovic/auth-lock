@@ -7,7 +7,6 @@ import { CanLoad, Route, UrlSegment } from '@angular/router';
 export class TestGuard implements CanLoad {
   canLoad(route: Route, segments: UrlSegment[]): boolean {
     // Add your logic here to decide if the module can be loaded
-    debugger;
     console.log('TestGuard#canLoad called');
     const token = localStorage.getItem('token');
     if (!token) {

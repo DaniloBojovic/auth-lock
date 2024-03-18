@@ -39,7 +39,6 @@ export class RegisterComponent implements OnInit {
   }
 
   MustMatch(controlName: string, matchingControlName: string) {
-    debugger;
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
@@ -56,7 +55,6 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     console.log(this.registerForm.value);
-    debugger;
     if (this.registerForm.valid) {
       this.userService.register(this.registerForm.value).subscribe((res) => {
         console.log(res);
