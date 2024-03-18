@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Observable,
-  catchError,
-  delay,
-  finalize,
-  of,
-  tap,
-  throwError,
-} from 'rxjs';
+import { Observable, delay, finalize, of } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { StateService } from '../services/state.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from './../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
 
 @Component({
   selector: 'app-user-list',
@@ -24,7 +19,9 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private stateService: StateService
+    private stateService: StateService,
+    private authService: AuthService,
+    public matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -51,5 +48,21 @@ export class UserListComponent implements OnInit {
     // this.users$.subscribe((users) => {
     //   console.log(users);
     // });
+  }
+
+  isAdmin(): any {
+    return this.authService.isAdmin();
+  }
+
+  createNewUser() {
+    const dialogRef = this.matDialog.open(AddUserDialogComponent, {
+      width: '600px',
+      height: '700px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      debugger;
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

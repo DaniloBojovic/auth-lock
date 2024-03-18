@@ -1,3 +1,8 @@
+.template-container {
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
 a {
   display: inline-block;
   margin-right: 10px;
@@ -6,6 +11,7 @@ a {
   color: white;
   text-decoration: none;
   border-radius: 5px;
+  margin-top: 10px;
 }
 
 a.active-route {

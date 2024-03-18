@@ -102,7 +102,7 @@ server.post("/login", (req, res) => {
   const { username, password } = req.body;
 
   db.get(
-    `SELECT username, password, email FROM users WHERE username = ? AND password = ?`,
+    `SELECT username, password, email, role FROM users WHERE username = ? AND password = ?`,
     [username, password],
     (err, row) => {
       if (err) {

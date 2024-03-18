@@ -1,23 +1,26 @@
-<!-- <h1>User List</h1>
-
-<div *ngIf="users$ | async as users; else loading">
-  <div *ngFor="let user of users">{{ user.name }}</div>
-</div>
-
-<ng-template #loading>Loading...</ng-template> -->
-
-<div class="user-list">
-  <h1>User List</h1>
-  <div *ngIf="users$ | async as users; else loading">
-    <div class="user-card" *ngFor="let user of users">
-      <h2>{{ user.name }}</h2>
-      <p>{{ user.email }}</p>
+<ng-container *ngIf="users$ | async as users; else loading">
+  <div class="user-list">
+    <div class="header">
+      <h1>User List</h1>
+      <button
+        *ngIf="isAdmin()"
+        (click)="createNewUser()"
+        class="add-user-button"
+      >
+        Add New User
+      </button>
+    </div>
+    <div>
+      <div class="user-card" *ngFor="let user of users">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+      </div>
     </div>
   </div>
-  <ng-template #loading>
-    <div class="loading">
-      <div class="spinner"></div>
-      Loading...
-    </div>
-  </ng-template>
-</div>
+</ng-container>
+<ng-template #loading>
+  <div class="loading">
+    <div class="spinner"></div>
+    Loading...
+  </div>
+</ng-template>

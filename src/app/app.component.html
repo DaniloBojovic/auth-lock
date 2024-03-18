@@ -1,34 +1,40 @@
-<a
-  *ngIf="router.url !== '/register'"
-  class="register-link"
-  routerLink="/register"
-  routerLinkActive="active-route"
-  >Register</a
->
-<a
-  *ngIf="router.url !== '/login'"
-  class="login-link"
-  routerLink="/login"
-  routerLinkActive="active-route"
-  >Login</a
->
-<a
-  *ngIf="router.url !== '/user-list'"
-  class="user-list-link"
-  routerLink="/user-list"
-  >User List</a
->
-<a
-  *ngIf="isAdmin()"
-  class="admin-link"
-  routerLink="/admin"
-  routerLinkActive="active-route"
-  >Admin Panel</a
->
-<button *ngIf="router.url === '/user-list'" class="back-btn" (click)="goBack()">
-  Go Back
-</button>
-<app-logout
-  *ngIf="router.url !== '/login' && router.url !== '/register'"
-></app-logout>
-<router-outlet></router-outlet>
+<div class="template-container">
+  <a
+    *ngIf="router.url !== '/register'"
+    class="register-link"
+    routerLink="/register"
+    routerLinkActive="active-route"
+    >Register</a
+  >
+  <a
+    *ngIf="router.url !== '/login'"
+    class="login-link"
+    routerLink="/login"
+    routerLinkActive="active-route"
+    >Login</a
+  >
+  <a
+    *ngIf="router.url !== '/user-list'"
+    class="user-list-link"
+    routerLink="/user-list"
+    >User List</a
+  >
+  <a
+    *ngIf="isAdmin()"
+    class="admin-link"
+    routerLink="/admin"
+    routerLinkActive="active-route"
+    >Admin Panel</a
+  >
+  <button
+    *ngIf="router.url === '/user-list'"
+    class="back-btn"
+    (click)="goBack()"
+  >
+    Go Back
+  </button>
+  <app-logout
+    *ngIf="router.url !== '/login' && router.url !== '/register'"
+  ></app-logout>
+  <router-outlet></router-outlet>
+</div>

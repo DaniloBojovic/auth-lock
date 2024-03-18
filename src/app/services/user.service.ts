@@ -2,27 +2,28 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  public apiUrl = 'https://jsonplaceholder.typicode.com/users';
-  private apiUrlToken = 'http://localhost:3000';
+  //public apiUrl = 'https://jsonplaceholder.typicode.com/users';
+  public apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   getUsers() {
     //return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
     return this.http
-      .get<any>('http://localhost:3000/users')
+      .get<any>(`${this.apiUrl}/users`)
       .pipe(catchError(this.handleError));
   }
 
   login(user: { username: string; password: string }) {
     //return this.http.get<any>('assets/db.json');
     return this.http
-      .post<any>('http://localhost:3000/login', {
+      .post<any>(`${this.apiUrl}/login`, {
         username: user.username,
         password: user.password,
       })
@@ -41,9 +42,8 @@ export class UserService {
   }
 
   register(user: any) {
-    //implement register logic
-    debugger;
-    return this.http.post<any>(this.apiUrlToken + '/register', user);
+    //return this.http.post<any>(this.apiUrl + '/register', user);
+    return this.http.post<any>(`${this.apiUrl}/register`, user);
   }
 
   private handleError(error: any) {

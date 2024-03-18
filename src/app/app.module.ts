@@ -11,6 +11,9 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { LogoutModule } from './user/logout/logout.module';
 import { AdminComponent } from './user/admin/admin.component';
 import { AdminFormComponent } from './user/admin/admin-form/admin-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,7 @@ import { AdminFormComponent } from './user/admin/admin-form/admin-form.component
     LoginComponent,
     AdminComponent,
     AdminFormComponent,
+    AddUserDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +30,8 @@ import { AdminFormComponent } from './user/admin/admin-form/admin-form.component
     HttpClientModule,
     ReactiveFormsModule,
     LogoutModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
