@@ -12,8 +12,18 @@
     </div>
     <div>
       <div class="user-card" *ngFor="let user of users">
-        <h2>{{ user.name }}</h2>
-        <p>{{ user.email }}</p>
+        <div class="user-info">
+          <h2>{{ user.name }}</h2>
+          <p>{{ user.email }}</p>
+        </div>
+        <div class="user-role">
+          Admin<input
+            type="checkbox"
+            [checked]="user.role === 'Admin'"
+            [disabled]="!isAdmin()"
+            (change)="updateUserRole(user)"
+          />
+        </div>
       </div>
     </div>
   </div>

@@ -65,6 +65,10 @@ export class UserService {
     );
   }
 
+  updateUserRole(user: any) {
+    return this.http.put(`${this.apiUrl}/users/${user.id}`, user);
+  }
+
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError(error);

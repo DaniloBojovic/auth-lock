@@ -177,5 +177,66 @@ server.post("/register", (req, res) => {
   });
 });
 
+// server.put("/users/:id", (req, res) => {
+//   console.log(req.body.role);
+//   const user = users.find((u) => u.id === parseInt(req.params.id));
+//   if (!user) {
+//     return res.status(404).send("User not found");
+//   }
+//   console.log("User role before:", user.role);
+//   user.role = req.body.role;
+//   console.log("User role after:", user.role);
+//   res.send(user);
+// });
+
+server.put("/users/:id", (req, res) => {
+  console.log(req.body.role);
+  const userId = parseInt(req.params.id);
+  const newRole = req.body.role;
+
+  // Select the user before updating
+  db.get(`SELECT * FROM users WHERE id = ?`, [userId], (err, user) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    console.log("User role before updating:", user.role);
+
+    // Update the user
+    db.run(
+      `UPDATE users SET role = ? WHERE id = ?`,
+      [newRole, userId],
+      (err) => {
+        if (err) {
+          console.error(err.message);
+          return res.status(500).json({ message: "Internal server error" });
+        }
+
+        // Select the updated user
+        db.get(
+          `SELECT * FROM users WHERE id = ?`,
+          [userId],
+          (err, updatedUser) => {
+            if (err) {
+              console.error(err.message);
+              return res.status(500).json({ message: "Internal server error" });
+            }
+            if (!updatedUser) {
+              return res.status(404).send({ message: "User not found" });
+            }
+
+            console.log("User role after:", updatedUser.role);
+            res.send(updatedUser);
+          }
+        );
+      }
+    );
+  });
+});
+
 server.use(router);
 server.listen(3000, () => console.log("Server running on port 3000"));

@@ -81,4 +81,16 @@ export class UserListComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  updateUserRole(user: any) {
+    user.role = user.role === 'Admin' ? 'User' : 'Admin';
+    this.userService.updateUserRole(user).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }
 }

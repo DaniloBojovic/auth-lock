@@ -11,6 +11,9 @@
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   h2 {
     margin: 0;
@@ -38,6 +41,21 @@
   border-radius: 50%;
   border-top: 4px solid #3498db;
   animation: spin 2s linear infinite;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-role {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.user-role input[type="checkbox"] {
+  margin-top: 2px;
 }
 
 @keyframes spin {

@@ -7,10 +7,11 @@
       "role": "User"
     },
     {
+      "id": 2,
       "username": "user2",
       "password": "password2",
-      "id": 2,
-      "role": "User"
+      "role": "Admin",
+      "email": "user2@example.com"
     },
     {
       "username": "admin",

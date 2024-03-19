@@ -7,7 +7,6 @@ import {
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as e from 'cors';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -81,5 +80,19 @@ describe('UserService', () => {
     const getUsersRequest = httpMock.expectOne(`${userService.apiUrl}/users`);
     expect(getUsersRequest.request.method).toBe('GET');
     getUsersRequest.flush([]);
+  });
+
+  it('should update user role', () => {
+    const dummyUser = { id: 1, role: 'Admin' };
+
+    userService.updateUserRole(dummyUser).subscribe((user: any) => {
+      expect(user.role).toEqual('User');
+    });
+
+    const req = httpMock.expectOne(
+      `${userService.apiUrl}/users/${dummyUser.id}`
+    );
+    expect(req.request.method).toBe('PUT');
+    req.flush({ ...dummyUser, role: 'User' });
   });
 });
