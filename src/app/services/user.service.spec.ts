@@ -83,6 +83,8 @@ describe('UserService', () => {
   });
 
   it('should update user role', () => {
+    httpMock.expectOne(`${userService.apiUrl}/users`).flush([]);
+
     const dummyUser = { id: 1, role: 'Admin' };
 
     userService.updateUserRole(dummyUser).subscribe((user: any) => {

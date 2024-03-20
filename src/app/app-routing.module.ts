@@ -21,6 +21,11 @@ const routes: Routes = [
     canActivate: [RoleGuard],
     data: { role: 'Admin' },
   },
+  {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
 ];
 
 @NgModule({

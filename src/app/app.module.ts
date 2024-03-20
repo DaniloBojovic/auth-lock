@@ -14,6 +14,7 @@ import { AdminFormComponent } from './user/admin/admin-form/admin-form.component
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     AdminComponent,
     AdminFormComponent,
     AddUserDialogComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
