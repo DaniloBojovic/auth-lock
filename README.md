@@ -1,10 +1,21 @@
-# UserApp
+# Auth-Lock
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.1.
+Auth-Lock is a web application built with Angular. It provides a robust user authentication system, allowing users to register, login, and logout. The application also includes an admin panel for user management.
+
+## Features
+
+- User Registration: New users can create an account.
+- User Login: Registered users can log in.
+- User Logout: Logged-in users can securely log out.
+- Admin Panel: Admin users can manage user roles.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+## Run backend
+
+Run `node server.js`
 
 ## Code scaffolding
 
