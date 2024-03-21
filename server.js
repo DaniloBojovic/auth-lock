@@ -101,14 +101,22 @@ db.all("SELECT * FROM users", [], (err, rows) => {
 });
 
 server.get("/users", (req, res) => {
-  db.all("SELECT * FROM users", [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    console.log("Rows:", rows);
-    res.json(rows);
-  });
+  const page = Number(req.query.page || 1);
+  const pageSize = Number(req.query.pageSize || 10);
+  const offset = (page - 1) * pageSize;
+
+  db.all(
+    "SELECT * FROM users LIMIT ? OFFSET ?",
+    [pageSize, offset],
+    (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      console.log("Rows:", rows);
+      res.json(rows);
+    },
+  );
 });
 
 // new code

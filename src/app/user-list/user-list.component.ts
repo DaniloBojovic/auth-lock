@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, delay, finalize, of } from 'rxjs';
+import { Observable, delay, finalize, of, tap } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { StateService } from '../services/state.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-list',
@@ -16,21 +17,24 @@ export class UserListComponent implements OnInit {
   users$!: Observable<any>;
   loading = false;
   state$ = this.stateService.state$;
+  totalUsers = 100;
 
   constructor(
     private userService: UserService,
     private stateService: StateService,
     private authService: AuthService,
-    public matDialog: MatDialog
+    public matDialog: MatDialog,
   ) {}
 
   ngOnInit() {
     this.loading = true;
     debugger;
-    this.userService.users$
+    this.userService
+      .getUsers(1, 10)
       .pipe(
-        delay(2000),
-        finalize(() => (this.loading = false))
+        delay(2000), // to test loading spinner
+        finalize(() => (this.loading = false)),
+        tap((users) => console.log('USERS COMPONENT: ', users)),
       )
       .subscribe(
         (users) => (this.users$ = of(users)),
@@ -39,7 +43,7 @@ export class UserListComponent implements OnInit {
           if (error.status === 404) {
             console.error('Not Found');
           }
-        }
+        },
       );
 
     // this.userService
@@ -66,6 +70,25 @@ export class UserListComponent implements OnInit {
     // });
   }
 
+  pageEvent(event: PageEvent) {
+    debugger;
+    this.userService
+      .getUsers(event.pageIndex + 1, event.pageSize)
+      .pipe(
+        finalize(() => (this.loading = false)),
+        tap((users) => console.log('USERS COMPONENT: ', users)),
+      )
+      .subscribe(
+        (users) => (this.users$ = of(users)),
+        (error: HttpErrorResponse) => {
+          console.error('An error occurred:', error);
+          if (error.status === 404) {
+            console.error('Not Found');
+          }
+        },
+      );
+  }
+
   isAdmin(): any {
     return this.authService.isAdmin();
   }
@@ -90,7 +113,7 @@ export class UserListComponent implements OnInit {
       },
       (err) => {
         console.error(err);
-      }
+      },
     );
   }
 }
