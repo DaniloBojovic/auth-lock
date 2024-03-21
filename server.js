@@ -40,29 +40,43 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   };
 
 // Insert rows into the users table
-let users = [
-  {
-    username: "user1",
-    password: "password1",
-    id: 1,
-    role: "User",
-    email: "user1@example.com",
-  },
-  {
-    username: "user2",
-    password: "password2",
-    id: 2,
-    role: "User",
-    email: "user2@example.com",
-  },
-  {
-    username: "admin",
-    password: "admin",
-    id: 3,
-    role: "Admin",
-    email: "admin@example.com",
-  },
-];
+// let users = [
+//   {
+//     username: "user1",
+//     password: "password1",
+//     id: 1,
+//     role: "User",
+//     email: "user1@example.com",
+//   },
+//   {
+//     username: "user2",
+//     password: "password2",
+//     id: 2,
+//     role: "User",
+//     email: "user2@example.com",
+//   },
+//   {
+//     username: "admin",
+//     password: "admin",
+//     id: 3,
+//     role: "Admin",
+//     email: "admin@example.com",
+//   },
+// ];
+let users = [];
+
+for (let i = 0; i < 40; i++) {
+  const isAdmin = i % 5 === 0;
+
+  users.push({
+    username: isAdmin ? `admin${i}` : `user${i}`,
+    password: `password${i}`,
+    id: i,
+    role: isAdmin ? "Admin" : "User", // Set role based on whether the user is an admin
+    email: isAdmin ? `admin${i}@example.com` : `user${i}@example.com`,
+  });
+}
+console.log(users);
 
 let stmt = db.prepare("INSERT OR REPLACE INTO users VALUES (?, ?, ?, ?, ?)");
 for (let i = 0; i < users.length; i++) {
@@ -71,7 +85,7 @@ for (let i = 0; i < users.length; i++) {
     users[i].username,
     users[i].password,
     users[i].role,
-    users[i].email
+    users[i].email,
   );
 }
 stmt.finalize();
@@ -117,7 +131,7 @@ server.post("/login", (req, res) => {
           process.env.JWT_SECRET,
           {
             expiresIn: "1h",
-          }
+          },
         );
         res.status(200).json({
           userId: user.id,
@@ -128,7 +142,7 @@ server.post("/login", (req, res) => {
       } else {
         res.status(401).json({ message: "Invalid username or password" });
       }
-    }
+    },
   );
 });
 
@@ -169,9 +183,9 @@ server.post("/register", (req, res) => {
 
               // Return the newly created user
               res.status(201).json(newUser);
-            }
+            },
           );
-        }
+        },
       );
     }
   });
@@ -231,9 +245,9 @@ server.put("/users/:id", (req, res) => {
 
             console.log("User role after:", updatedUser.role);
             res.send(updatedUser);
-          }
+          },
         );
-      }
+      },
     );
   });
 });
