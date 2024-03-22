@@ -6,14 +6,15 @@
 </ng-container>
 <ng-template #content>
   <ng-container *ngIf="users$ | async as users">
-    <form (submit)="onSearch($event)">
+    <form (submit)="onSearch($event)" class="search-form">
       <input
         type="text"
         [(ngModel)]="searchTerm"
         name="searchTerm"
         placeholder="Search users"
+        class="search-input"
       />
-      <button type="submit">Search</button>
+      <button type="submit" class="search-button">Search</button>
     </form>
     <div class="user-list">
       <div class="header">
