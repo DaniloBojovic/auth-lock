@@ -1,36 +1,45 @@
-<ng-container *ngIf="users$ | async as users; else loading">
-  <div class="user-list">
-    <div class="header">
-      <h1>User List</h1>
-      <button
-        *ngIf="isAdmin()"
-        (click)="createNewUser()"
-        class="add-user-button"
-      >
-        Add New User
-      </button>
-    </div>
-    <div>
-      <div class="user-card" *ngFor="let user of users">
-        <div class="user-info">
-          <h2>{{ user.name }}</h2>
-          <p>{{ user.email }}</p>
-        </div>
-        <div class="user-role">
-          Admin<input
-            type="checkbox"
-            [checked]="user.role === 'Admin'"
-            [disabled]="!isAdmin()"
-            (change)="updateUserRole(user)"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-container>
-<ng-template #loading>
+<ng-container *ngIf="loading; else content">
   <div class="loading">
     <div class="spinner"></div>
     Loading...
   </div>
+</ng-container>
+<ng-template #content>
+  <ng-container *ngIf="users$ | async as users">
+    <div class="user-list">
+      <div class="header">
+        <h1>User List</h1>
+        <button
+          *ngIf="isAdmin()"
+          (click)="createNewUser()"
+          class="add-user-button"
+        >
+          Add New User
+        </button>
+      </div>
+      <div>
+        <div class="user-card" *ngFor="let user of users">
+          <div class="user-info">
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.email }}</p>
+          </div>
+          <div class="user-role">
+            Admin<input
+              type="checkbox"
+              [checked]="user.role === 'Admin'"
+              [disabled]="!isAdmin()"
+              (change)="updateUserRole(user)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <mat-paginator
+    [length]="totalUsers"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="pageEvent($event)"
+  >
+  </mat-paginator>
 </ng-template>

@@ -14,23 +14,32 @@ export class UserService {
   private userSubject = new BehaviorSubject<any[]>([]);
   users$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {
     this.getUsers().subscribe();
   }
 
-  // getUsers() {
+  // getUsers(page: number = 1, pageSize: number = 10): Observable<any[]> {
   //   //return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
   //   return this.http
-  //     .get<any>(`${this.apiUrl}/users`)
-  //     .pipe(catchError(this.handleError));
+  //     .get<any[]>(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}`)
+  //     .pipe(
+  //       tap((users) => console.log('USERS SERVICE: ', users)),
+  //       catchError(this.handleError),
+  //     );
   // }
 
-  getUsers(): Observable<any[]> {
+  getUsers(page: number = 1, pageSize: number = 10): Observable<any[]> {
     debugger;
-    return this.http.get<any[]>(`${this.apiUrl}/users`).pipe(
-      tap((users) => this.userSubject.next(users)),
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<any[]>(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}`)
+      .pipe(
+        tap((users) => console.log('USERS Service: ', users)),
+        tap((users) => this.userSubject.next(users)),
+        catchError(this.handleError),
+      );
   }
 
   login(user: { username: string; password: string }) {
@@ -44,7 +53,7 @@ export class UserService {
         tap((res) => {
           localStorage.setItem('token', res.token);
           localStorage.setItem('role', res.role);
-        })
+        }),
       );
   }
 
@@ -61,7 +70,7 @@ export class UserService {
       tap((newUser) => {
         const users = this.userSubject.value;
         this.userSubject.next([...users, newUser]);
-      })
+      }),
     );
   }
 
