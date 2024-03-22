@@ -18,6 +18,7 @@ export class UserListComponent implements OnInit {
   loading = false;
   state$ = this.stateService.state$;
   totalUsers = 100;
+  searchTerm = '';
 
   constructor(
     private userService: UserService,
@@ -27,24 +28,7 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loading = true;
-    debugger;
-    this.userService
-      .getUsers(1, 10)
-      .pipe(
-        delay(2000), // to test loading spinner
-        finalize(() => (this.loading = false)),
-        tap((users) => console.log('USERS COMPONENT: ', users)),
-      )
-      .subscribe(
-        (users) => (this.users$ = of(users)),
-        (error: HttpErrorResponse) => {
-          console.error('An error occurred:', error);
-          if (error.status === 404) {
-            console.error('Not Found');
-          }
-        },
-      );
+    this.loadUsers(1, 10);
 
     // this.userService
     //   .getUsers()
@@ -71,10 +55,20 @@ export class UserListComponent implements OnInit {
   }
 
   pageEvent(event: PageEvent) {
-    debugger;
+    this.loadUsers(event.pageIndex + 1, event.pageSize);
+  }
+
+  onSearch(event: Event) {
+    event.preventDefault();
+    this.loadUsers(1, 10, this.searchTerm);
+  }
+
+  loadUsers(page: number, pageSize: number, searchTerm?: string) {
+    this.loading = true;
     this.userService
-      .getUsers(event.pageIndex + 1, event.pageSize)
+      .getUsers(page, pageSize, searchTerm)
       .pipe(
+        delay(2000),
         finalize(() => (this.loading = false)),
         tap((users) => console.log('USERS COMPONENT: ', users)),
       )
