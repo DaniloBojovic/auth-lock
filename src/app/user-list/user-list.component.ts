@@ -18,6 +18,7 @@ export class UserListComponent implements OnInit {
   loading = false;
   state$ = this.stateService.state$;
   totalUsers = 100;
+  currentSearchTerm = '';
   searchTerm = '';
 
   constructor(
@@ -55,12 +56,15 @@ export class UserListComponent implements OnInit {
   }
 
   pageEvent(event: PageEvent) {
-    this.loadUsers(event.pageIndex + 1, event.pageSize);
+    debugger;
+    this.loadUsers(event.pageIndex + 1, event.pageSize, this.currentSearchTerm);
   }
 
   onSearch(event: Event) {
+    debugger;
     event.preventDefault();
-    this.loadUsers(1, 10, this.searchTerm);
+    this.currentSearchTerm = this.searchTerm;
+    this.loadUsers(1, 10, this.currentSearchTerm);
   }
 
   loadUsers(page: number, pageSize: number, searchTerm?: string) {
