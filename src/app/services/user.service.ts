@@ -31,10 +31,16 @@ export class UserService {
   //     );
   // }
 
-  getUsers(page: number = 1, pageSize: number = 10): Observable<any[]> {
+  getUsers(
+    page: number = 1,
+    pageSize: number = 10,
+    searchTerm: string = '',
+  ): Observable<any[]> {
     debugger;
     return this.http
-      .get<any[]>(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}`)
+      .get<
+        any[]
+      >(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}`)
       .pipe(
         tap((users) => console.log('USERS Service: ', users)),
         tap((users) => this.userSubject.next(users)),

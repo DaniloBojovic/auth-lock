@@ -103,11 +103,12 @@ db.all("SELECT * FROM users", [], (err, rows) => {
 server.get("/users", (req, res) => {
   const page = Number(req.query.page || 1);
   const pageSize = Number(req.query.pageSize || 10);
+  const searchTerm = req.query.searchTerm || "";
   const offset = (page - 1) * pageSize;
 
   db.all(
-    "SELECT * FROM users LIMIT ? OFFSET ?",
-    [pageSize, offset],
+    "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
+    [`%${searchTerm}%`, pageSize, offset],
     (err, rows) => {
       if (err) {
         res.status(500).json({ error: err.message });
