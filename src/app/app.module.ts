@@ -16,6 +16,7 @@ import { AddUserDialogComponent } from './dialogs/add-user-dialog/add-user-dialo
 import { MatDialogModule } from '@angular/material/dialog';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserSearchComponent } from './user-search/user-search.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 
 @NgModule({
   declarations: [
