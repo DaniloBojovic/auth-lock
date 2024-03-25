@@ -35,6 +35,7 @@ export class UserListComponent implements OnInit {
   currentSearchTerm = '';
   searchTerm = '';
   private searchSubject = new Subject<string>();
+  sortOrder: string = 'asc';
 
   constructor(
     private userService: UserService,
@@ -77,12 +78,18 @@ export class UserListComponent implements OnInit {
     this.searchSubject.next(this.currentSearchTerm);
   }
 
-  loadUsers(page: number, pageSize: number, searchTerm?: string) {
+  loadUsers(
+    page: number,
+    pageSize: number,
+    searchTerm?: string,
+    property?: string,
+    order?: string
+  ) {
     this.loading = true;
     this.userService
-      .getUsers(page, pageSize, searchTerm)
+      .getUsers(page, pageSize, searchTerm, property, order)
       .pipe(
-        delay(1000),
+        delay(500),
         finalize(() => (this.loading = false)),
         tap((response: any) => {
           this.totalUsers = response.totalUsers; // Update totalUsers here
@@ -128,8 +135,20 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  sortUsersBy(property: string) {
+  sortUsersBy(property: string, order: string) {
     debugger;
-    this.users$ = this.users$.pipe(map((users) => _.sortBy(users, [property])));
+    //this.users$ = this.users$.pipe(map((users) => _.sortBy(users, [property])));
+    this.loadUsers(
+      this.currentPage + 1,
+      this.pageSize,
+      this.currentSearchTerm,
+      property,
+      order
+    );
+  }
+
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+    this.sortUsersBy('username', this.sortOrder);
   }
 }
