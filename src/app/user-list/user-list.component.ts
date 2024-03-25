@@ -6,6 +6,7 @@ import {
   delay,
   distinctUntilChanged,
   finalize,
+  map,
   of,
   tap,
 } from 'rxjs';
@@ -17,6 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
 
+import * as _ from 'lodash';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -27,6 +30,8 @@ export class UserListComponent implements OnInit {
   loading = false;
   state$ = this.stateService.state$;
   totalUsers = 100;
+  pageSize = 10;
+  currentPage = 0;
   currentSearchTerm = '';
   searchTerm = '';
   private searchSubject = new Subject<string>();
@@ -35,7 +40,7 @@ export class UserListComponent implements OnInit {
     private userService: UserService,
     private stateService: StateService,
     private authService: AuthService,
-    public matDialog: MatDialog,
+    public matDialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -55,7 +60,13 @@ export class UserListComponent implements OnInit {
 
   pageEvent(event: PageEvent) {
     debugger;
-    this.loadUsers(event.pageIndex + 1, event.pageSize, this.currentSearchTerm);
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadUsers(
+      this.currentPage + 1,
+      event.pageSize,
+      this.currentSearchTerm
+    );
   }
 
   onSearch(event: Event) {
@@ -73,16 +84,19 @@ export class UserListComponent implements OnInit {
       .pipe(
         delay(1000),
         finalize(() => (this.loading = false)),
-        tap((users) => console.log('USERS COMPONENT: ', users)),
+        tap((response: any) => {
+          this.totalUsers = response.totalUsers; // Update totalUsers here
+          console.log('USERS COMPONENT: ', response);
+        })
       )
       .subscribe(
-        (users) => (this.users$ = of(users)),
+        (response: any) => (this.users$ = of(response.users)),
         (error: HttpErrorResponse) => {
           console.error('An error occurred:', error);
           if (error.status === 404) {
             console.error('Not Found');
           }
-        },
+        }
       );
   }
 
@@ -110,7 +124,12 @@ export class UserListComponent implements OnInit {
       },
       (err) => {
         console.error(err);
-      },
+      }
     );
+  }
+
+  sortUsersBy(property: string) {
+    debugger;
+    this.users$ = this.users$.pipe(map((users) => _.sortBy(users, [property])));
   }
 }

@@ -85,7 +85,7 @@ for (let i = 0; i < users.length; i++) {
     users[i].username,
     users[i].password,
     users[i].role,
-    users[i].email,
+    users[i].email
   );
 }
 stmt.finalize();
@@ -106,18 +106,45 @@ server.get("/users", (req, res) => {
   const searchTerm = req.query.searchTerm || "";
   const offset = (page - 1) * pageSize;
 
+  // Get total number of users that match the search term
   db.all(
-    "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
-    [`%${searchTerm}%`, pageSize, offset],
-    (err, rows) => {
+    "SELECT COUNT(*) as totalUsers FROM users where username LIKE ?",
+    [`%${searchTerm}%`],
+    (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-      console.log("Rows:", rows);
-      res.json(rows);
-    },
+      const totalUsers = result[0].totalUsers;
+
+      //Get paginated users
+      db.all(
+        "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
+        [`%${searchTerm}%`, pageSize, offset],
+        (err, rows) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          //Return both totalUser and users
+          res.json({ totalUsers, users: rows });
+        }
+      );
+    }
   );
+
+  // db.all(
+  //   "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
+  //   [`%${searchTerm}%`, pageSize, offset],
+  //   (err, rows) => {
+  //     if (err) {
+  //       res.status(500).json({ error: err.message });
+  //       return;
+  //     }
+  //     console.log("Rows:", rows);
+  //     res.json(rows);
+  //   },
+  // );
 });
 
 // new code
@@ -140,7 +167,7 @@ server.post("/login", (req, res) => {
           process.env.JWT_SECRET,
           {
             expiresIn: "1h",
-          },
+          }
         );
         res.status(200).json({
           userId: user.id,
@@ -151,7 +178,7 @@ server.post("/login", (req, res) => {
       } else {
         res.status(401).json({ message: "Invalid username or password" });
       }
-    },
+    }
   );
 });
 
@@ -192,9 +219,9 @@ server.post("/register", (req, res) => {
 
               // Return the newly created user
               res.status(201).json(newUser);
-            },
+            }
           );
-        },
+        }
       );
     }
   });
@@ -254,9 +281,9 @@ server.put("/users/:id", (req, res) => {
 
             console.log("User role after:", updatedUser.role);
             res.send(updatedUser);
-          },
+          }
         );
-      },
+      }
     );
   });
 });
