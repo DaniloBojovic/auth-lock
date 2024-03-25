@@ -16,6 +16,8 @@
       />
       <button type="submit" class="search-button">Search</button>
     </form>
+    <button (click)="sortUsersBy('name')">Sort by Name</button>
+    <button (click)="sortUsersBy('email')">Sort by Email</button>
     <div class="user-list">
       <div class="header">
         <h1>User List</h1>
@@ -47,7 +49,8 @@
   </ng-container>
   <mat-paginator
     [length]="totalUsers"
-    [pageSize]="10"
+    [pageIndex]="currentPage"
+    [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 20]"
     (page)="pageEvent($event)"
   >
