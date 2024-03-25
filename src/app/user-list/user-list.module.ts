@@ -5,13 +5,14 @@ import { UserListComponent } from './user-list.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
+import { UserSearchComponent } from '../user-search/user-search.component';
 
 const routes: Routes = [
   { path: '', component: UserListComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
-  declarations: [UserListComponent],
+  declarations: [UserListComponent, UserSearchComponent],
   exports: [UserListComponent],
   imports: [
     CommonModule,

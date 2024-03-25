@@ -52,7 +52,6 @@ export class AddUserDialogComponent implements OnInit {
   }
 
   onSubmit() {
-    debugger;
     if (this.addUserForm.valid) {
       this.userService.register(this.addUserForm.value).subscribe((res) => {
         console.log(res);
