@@ -76,6 +76,7 @@ export class UserListComponent implements OnInit {
     this.currentSearchTerm = this.searchTerm;
     //this.loadUsers(1, 10, this.currentSearchTerm);
     this.searchSubject.next(this.currentSearchTerm);
+    this.sortUsersBy('username', this.sortOrder);
   }
 
   loadUsers(
