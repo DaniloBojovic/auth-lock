@@ -118,3 +118,21 @@
 .search-button:hover {
   background-color: #45a049;
 }
+
+.sort-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sort-buttons button {
+  padding: 10px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.sort-buttons button:hover {
+  background-color: #45a049;
+}

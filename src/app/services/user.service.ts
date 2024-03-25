@@ -14,10 +14,7 @@ export class UserService {
   private userSubject = new BehaviorSubject<any[]>([]);
   users$ = this.userSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor(private http: HttpClient, private router: Router) {
     this.getUsers().subscribe();
   }
 
@@ -35,16 +32,18 @@ export class UserService {
     page: number = 1,
     pageSize: number = 10,
     searchTerm: string = '',
+    property: string = '',
+    order: string = 'asc'
   ): Observable<any[]> {
     debugger;
     return this.http
-      .get<
-        any[]
-      >(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}`)
+      .get<any[]>(
+        `${this.apiUrl}/users?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}&property=${property}&sort=${order}`
+      )
       .pipe(
         tap((users) => console.log('USERS Service: ', users)),
         tap((users) => this.userSubject.next(users)),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -59,7 +58,7 @@ export class UserService {
         tap((res) => {
           localStorage.setItem('token', res.token);
           localStorage.setItem('role', res.role);
-        }),
+        })
       );
   }
 
@@ -76,7 +75,7 @@ export class UserService {
       tap((newUser) => {
         const users = this.userSubject.value;
         this.userSubject.next([...users, newUser]);
-      }),
+      })
     );
   }
 

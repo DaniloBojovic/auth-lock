@@ -76,7 +76,6 @@ for (let i = 0; i < 40; i++) {
     email: isAdmin ? `admin${i}@example.com` : `user${i}@example.com`,
   });
 }
-console.log(users);
 
 let stmt = db.prepare("INSERT OR REPLACE INTO users VALUES (?, ?, ?, ?, ?)");
 for (let i = 0; i < users.length; i++) {
@@ -103,8 +102,14 @@ db.all("SELECT * FROM users", [], (err, rows) => {
 server.get("/users", (req, res) => {
   const page = Number(req.query.page || 1);
   const pageSize = Number(req.query.pageSize || 10);
+  const property = req.query.property || "username";
   const searchTerm = req.query.searchTerm || "";
+  const order = req.query.sort || "asc";
   const offset = (page - 1) * pageSize;
+
+  console.log(
+    `page: ${page}, pageSize: ${pageSize}, searchTerm: ${searchTerm}, property: ${property}, sort: ${order}, offset: ${offset}`
+  );
 
   // Get total number of users that match the search term
   db.all(
@@ -119,7 +124,7 @@ server.get("/users", (req, res) => {
 
       //Get paginated users
       db.all(
-        "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
+        `SELECT * FROM users where username LIKE ? ORDER BY ${property} ${order} LIMIT ? OFFSET ?`,
         [`%${searchTerm}%`, pageSize, offset],
         (err, rows) => {
           if (err) {
@@ -132,19 +137,6 @@ server.get("/users", (req, res) => {
       );
     }
   );
-
-  // db.all(
-  //   "SELECT * FROM users where username LIKE ? LIMIT ? OFFSET ?",
-  //   [`%${searchTerm}%`, pageSize, offset],
-  //   (err, rows) => {
-  //     if (err) {
-  //       res.status(500).json({ error: err.message });
-  //       return;
-  //     }
-  //     console.log("Rows:", rows);
-  //     res.json(rows);
-  //   },
-  // );
 });
 
 // new code

@@ -16,8 +16,11 @@
       />
       <button type="submit" class="search-button">Search</button>
     </form>
-    <button (click)="sortUsersBy('name')">Sort by Name</button>
-    <button (click)="sortUsersBy('email')">Sort by Email</button>
+    <div class="sort-buttons">
+      <button (click)="toggleSortOrder()">
+        {{ sortOrder === "asc" ? "&#9650;" : "&#9660;" }} Username
+      </button>
+    </div>
     <div class="user-list">
       <div class="header">
         <h1>User List</h1>
