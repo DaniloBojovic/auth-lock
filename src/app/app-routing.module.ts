@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegisterComponent } from './user/register/register.component';
-import { LoginComponent } from './user/login/login.component';
+import { RegisterComponent } from './user-auth/register/register.component';
+import { LoginComponent } from './user-auth/login/login.component';
 import { TestGuard } from './guards/test.guard';
 import { RoleGuard } from './guards/role.guard';
-import { AdminComponent } from './user/admin/admin.component';
+import { AdminComponent } from './user-auth/admin/admin.component';
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -12,7 +12,9 @@ const routes: Routes = [
   {
     path: 'user-list',
     loadChildren: () =>
-      import('./user-list/user-list.module').then((m) => m.UserListModule),
+      import('./components/user/user-list/user-list.module').then(
+        (m) => m.UserListModule
+      ),
     canLoad: [TestGuard],
   },
   {

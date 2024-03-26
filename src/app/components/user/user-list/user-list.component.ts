@@ -10,12 +10,12 @@ import {
   of,
   tap,
 } from 'rxjs';
-import { UserService } from '../services/user.service';
-import { StateService } from '../services/state.service';
+import { UserService } from '../../../services/user.service';
+import { StateService } from '../../../services/state.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from './../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
+import { AddUserDialogComponent } from '../../../dialogs/add-user-dialog/add-user-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
 
 import * as _ from 'lodash';
