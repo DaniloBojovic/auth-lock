@@ -35,7 +35,6 @@ export class UserService {
     property: string = '',
     order: string = 'asc'
   ): Observable<any[]> {
-    debugger;
     return this.http
       .get<any[]>(
         `${this.apiUrl}/users?page=${page}&pageSize=${pageSize}&searchTerm=${searchTerm}&property=${property}&sort=${order}`
@@ -69,7 +68,6 @@ export class UserService {
   }
 
   register(user: any) {
-    debugger;
     //return this.http.post<any>(this.apiUrl + '/register', user);
     return this.http.post<any>(`${this.apiUrl}/register`, user).pipe(
       tap((newUser) => {

@@ -10,12 +10,12 @@ import {
   of,
   tap,
 } from 'rxjs';
-import { UserService } from '../services/user.service';
-import { StateService } from '../services/state.service';
+import { UserService } from '../../../services/user.service';
+import { StateService } from '../../../services/state.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from './../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddUserDialogComponent } from '../dialogs/add-user-dialog/add-user-dialog.component';
+import { AddUserDialogComponent } from '../../../dialogs/add-user-dialog/add-user-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
 
 import * as _ from 'lodash';
@@ -45,7 +45,6 @@ export class UserListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    debugger;
     // This  sets up a subscription to the `searchSubject` observable.
     // The `debounceTime(300)` operator ensures that events are processed at most once every 300ms.
     // The `distinctUntilChanged()` operator ensures that the `loadUsers` method is only called when the search term changes.
@@ -60,7 +59,6 @@ export class UserListComponent implements OnInit {
   }
 
   pageEvent(event: PageEvent) {
-    debugger;
     this.currentPage = event.pageIndex;
     this.pageSize = event.pageSize;
     this.loadUsers(
@@ -70,11 +68,18 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  onSearch(event: Event) {
+  // onSearch(event: Event) {
+  //   debugger;
+  //   event.preventDefault();
+  //   this.currentSearchTerm = this.searchTerm;
+  //   //this.loadUsers(1, 10, this.currentSearchTerm);
+  //   this.searchSubject.next(this.currentSearchTerm);
+  //   this.sortUsersBy('username', this.sortOrder);
+  // }
+
+  handleSearch(searchTerm: string) {
     debugger;
-    event.preventDefault();
-    this.currentSearchTerm = this.searchTerm;
-    //this.loadUsers(1, 10, this.currentSearchTerm);
+    this.currentSearchTerm = searchTerm;
     this.searchSubject.next(this.currentSearchTerm);
     this.sortUsersBy('username', this.sortOrder);
   }
@@ -119,7 +124,6 @@ export class UserListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      debugger;
       console.log(`Dialog result: ${result}`);
     });
   }

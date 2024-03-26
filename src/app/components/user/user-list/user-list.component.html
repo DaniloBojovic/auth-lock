@@ -1,26 +1,13 @@
 <ng-container *ngIf="loading; else content">
-  <div class="loading">
-    <div class="spinner"></div>
-    Loading...
-  </div>
+  <app-loading-spinner></app-loading-spinner>
 </ng-container>
 <ng-template #content>
   <ng-container *ngIf="users$ | async as users">
-    <form (submit)="onSearch($event)" class="search-form">
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        name="searchTerm"
-        placeholder="Search users"
-        class="search-input"
-      />
-      <button type="submit" class="search-button">Search</button>
-    </form>
-    <div class="sort-buttons">
-      <button (click)="toggleSortOrder()">
-        {{ sortOrder === "asc" ? "&#9650;" : "&#9660;" }} Username
-      </button>
-    </div>
+    <app-user-search
+      [searchTerm]="currentSearchTerm"
+      (search)="handleSearch($event)"
+    ></app-user-search>
+
     <div class="user-list">
       <div class="header">
         <h1>User List</h1>
@@ -31,6 +18,10 @@
         >
           Add New User
         </button>
+        <app-sort-button
+          [(sortOrder)]="sortOrder"
+          (sortOrderChange)="sortUsersBy('username', $event)"
+        ></app-sort-button>
       </div>
       <div>
         <div class="user-card" *ngFor="let user of users">
@@ -50,12 +41,10 @@
       </div>
     </div>
   </ng-container>
-  <mat-paginator
+  <app-paginator
     [length]="totalUsers"
     [pageIndex]="currentPage"
     [pageSize]="pageSize"
-    [pageSizeOptions]="[5, 10, 20]"
-    (page)="pageEvent($event)"
-  >
-  </mat-paginator>
+    (pageChange)="pageEvent($event)"
+  ></app-paginator>
 </ng-template>
