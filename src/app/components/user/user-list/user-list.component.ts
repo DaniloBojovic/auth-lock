@@ -6,7 +6,6 @@ import {
   delay,
   distinctUntilChanged,
   finalize,
-  map,
   of,
   tap,
 } from 'rxjs';
@@ -17,8 +16,6 @@ import { AuthService } from '../../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from '../../../dialogs/add-user-dialog/add-user-dialog.component';
 import { PageEvent } from '@angular/material/paginator';
-
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-user-list',
@@ -78,7 +75,6 @@ export class UserListComponent implements OnInit {
   // }
 
   handleSearch(searchTerm: string) {
-    debugger;
     this.currentSearchTerm = searchTerm;
     this.searchSubject.next(this.currentSearchTerm);
     this.sortUsersBy('username', this.sortOrder);
@@ -141,8 +137,6 @@ export class UserListComponent implements OnInit {
   }
 
   sortUsersBy(property: string, order: string) {
-    debugger;
-    //this.users$ = this.users$.pipe(map((users) => _.sortBy(users, [property])));
     this.loadUsers(
       this.currentPage + 1,
       this.pageSize,
