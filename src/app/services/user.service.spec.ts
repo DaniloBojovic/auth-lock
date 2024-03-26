@@ -5,13 +5,10 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 
 describe('UserService', () => {
   let userService: UserService;
   let httpMock: HttpTestingController;
-  let httpClientSpy: { get: jasmine.Spy };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,7 +18,6 @@ describe('UserService', () => {
 
     userService = TestBed.inject(UserService);
     httpMock = TestBed.inject(HttpTestingController);
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
   });
 
   afterEach(() => {

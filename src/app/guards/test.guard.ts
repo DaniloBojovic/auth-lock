@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, UrlSegment } from '@angular/router';
+import { CanLoad } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TestGuard implements CanLoad {
-  canLoad(route: Route, segments: UrlSegment[]): boolean {
+  canLoad(): boolean {
     // Add your logic here to decide if the module can be loaded
     console.log('TestGuard#canLoad called');
     const token = localStorage.getItem('token');

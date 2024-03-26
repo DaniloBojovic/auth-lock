@@ -44,7 +44,6 @@ export class UserSearchComponent {
   @Input() searchTerm: string = '';
 
   onSearch(event: Event) {
-    debugger;
     event.preventDefault();
     this.search.emit(this.searchTerm);
   }
