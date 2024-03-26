@@ -6,9 +6,9 @@ import { AuthGuard } from '../../../guards/auth.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { UserSearchComponent } from '../user-search/user-search.component';
-import { PaginatorComponent } from '../../paginator/paginator.component';
-import { SortButtonComponent } from '../../sort-button/sort-button.component';
-import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
+import { PaginatorComponent } from '../../shared/paginator/paginator.component';
+import { SortButtonComponent } from '../../shared/sort-button/sort-button.component';
+import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-spinner.component';
 
 const routes: Routes = [
   { path: '', component: UserListComponent, canActivate: [AuthGuard] },
