@@ -35,3 +35,16 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', (username, password) => {
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:4200/login', // replace with your login endpoint
+    body: {
+      username,
+      password,
+    },
+  }).then((resp) => {
+    window.localStorage.setItem('token', resp.body.token);
+  });
+});

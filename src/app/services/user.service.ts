@@ -72,7 +72,10 @@ export class UserService {
     return this.http.post<any>(`${this.apiUrl}/register`, user).pipe(
       tap((newUser) => {
         const users = this.userSubject.value;
-        this.userSubject.next([...users, newUser]);
+        // this.userSubject.next([...users, newUser]);
+        this.userSubject.next(
+          Array.isArray(users) ? [...users, newUser] : [newUser]
+        );
       })
     );
   }
