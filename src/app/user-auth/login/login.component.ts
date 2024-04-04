@@ -39,7 +39,23 @@ export class LoginComponent implements OnInit {
       .subscribe((res: LoginResponse | null) => {
         debugger;
         if (res && res.token) {
-          this.router.navigate(['/user-list']);
+          // Store the token temporarily
+          localStorage.setItem('tempToken', res.token);
+
+          // Prompt the user to enter the 2FA code
+          const code = Number(window.prompt('Please enter your 2FA code'));
+
+          // Verify the 2FA code
+          if (code === res.code) {
+            // If the code is correct, store the token permanently
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('role', res.role);
+            this.router.navigate(['/user-list']);
+          } else {
+            // If the code is incorrect, clear the temporary token and show an error message
+            localStorage.removeItem('tempToken');
+            alert('Invalid 2FA code');
+          }
         }
       });
   }

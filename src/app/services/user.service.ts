@@ -26,6 +26,16 @@ export class UserService {
     this.getUsers().subscribe();
   }
 
+  // getUsers(page: number = 1, pageSize: number = 10): Observable<any[]> {
+  //   //return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
+  //   return this.http
+  //     .get<any[]>(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}`)
+  //     .pipe(
+  //       tap((users) => console.log('USERS SERVICE: ', users)),
+  //       catchError(this.handleError),
+  //     );
+  // }
+
   getUsers(
     page: number = 1,
     pageSize: number = 10,
@@ -53,18 +63,37 @@ export class UserService {
       })
       .pipe(
         tap((res) => {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('role', res.role);
-          debugger;
-          // Send SMS
-          this.http
-            .post(`${this.apiUrl}/send-sms`, {
-              phoneNumber: '+381611900174',
-              message: `Your 2FA code is ${res.code}`,
-            })
-            .subscribe();
+          // new code refactoring
+          this.storeLoginData(res);
+          this.send2FACode(res.code);
+
+          // Old code
+          // localStorage.setItem('token', res.token);
+          // localStorage.setItem('role', res.role);
+          // debugger;
+          // // Send SMS
+          // this.http
+          //   .post(`${this.apiUrl}/send-sms`, {
+          //     phoneNumber: '+381611900174',
+          //     message: `Your 2FA code is ${res.code}`,
+          //   })
+          //   .subscribe();
         })
       );
+  }
+
+  private storeLoginData(res: LoginResponse) {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('role', res.role);
+  }
+
+  private send2FACode(code: number) {
+    const phoneNumber = '+381611900174';
+    const message = `Your 2FA code is ${code}`;
+
+    this.http
+      .post(`${this.apiUrl}/send-sms`, { phoneNumber, message })
+      .subscribe();
   }
 
   logout() {
