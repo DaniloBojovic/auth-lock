@@ -42,4 +42,4 @@ testem.log
 Thumbs.db
 
 # Database
-user.db
+users.db
