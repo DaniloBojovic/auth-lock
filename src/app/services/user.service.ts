@@ -26,16 +26,6 @@ export class UserService {
     this.getUsers().subscribe();
   }
 
-  // getUsers(page: number = 1, pageSize: number = 10): Observable<any[]> {
-  //   //return this.http.get<any>(this.apiUrl).pipe(catchError(this.handleError));
-  //   return this.http
-  //     .get<any[]>(`${this.apiUrl}/users?page=${page}&pageSize=${pageSize}`)
-  //     .pipe(
-  //       tap((users) => console.log('USERS SERVICE: ', users)),
-  //       catchError(this.handleError),
-  //     );
-  // }
-
   getUsers(
     page: number = 1,
     pageSize: number = 10,
