@@ -88,7 +88,7 @@ export class UserService {
   }
 
   private send2FACode(code: number) {
-    const phoneNumber = '+381611900174';
+    const phoneNumber = environment.phoneNumber;
     const message = `Your 2FA code is ${code}`;
 
     this.http
