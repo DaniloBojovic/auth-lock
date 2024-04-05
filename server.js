@@ -7,6 +7,14 @@ const middlewares = jsonServer.defaults();
 //const db = require("./db.json");
 require("dotenv").config();
 
+const generate2FACode = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+};
+const client = require("twilio")(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
+
 server.use(jsonServer.bodyParser);
 server.use(middlewares);
 
@@ -15,7 +23,6 @@ let db = new sqlite3.Database("./users.db", (err) => {
   if (err) {
     console.error(err.message);
   }
-  console.log("Connected to the SQLite database.");
 });
 
 // Drop the existing users table
@@ -107,10 +114,6 @@ server.get("/users", (req, res) => {
   const order = req.query.sort || "asc";
   const offset = (page - 1) * pageSize;
 
-  console.log(
-    `page: ${page}, pageSize: ${pageSize}, searchTerm: ${searchTerm}, property: ${property}, sort: ${order}, offset: ${offset}`
-  );
-
   // Get total number of users that match the search term
   db.all(
     "SELECT COUNT(*) as totalUsers FROM users where username LIKE ?",
@@ -161,17 +164,40 @@ server.post("/login", (req, res) => {
             expiresIn: "1h",
           }
         );
+
+        const code = generate2FACode();
+
         res.status(200).json({
           userId: user.id,
           token: token,
           role: user.role,
           email: user.email,
+          code: code, // Return the 2FA code
         });
       } else {
         res.status(401).json({ message: "Invalid username or password" });
       }
     }
   );
+});
+
+server.post("/send-sms", (req, res) => {
+  const { phoneNumber, message } = req.body;
+
+  // Log the phoneNumber and message
+  console.log(`PhoneNumber: ${phoneNumber}, Message: ${message}`);
+  console.log(`TWILIO_PhoneNumber: ${process.env.TWILIO_PHONE_NUMBER}`);
+
+  client.messages
+    .create({
+      body: message,
+      from: "+12563968528", //process.env.TWILIO_PHONE_NUMBER,
+      to: phoneNumber,
+    })
+    .then((message) =>
+      res.status(200).json({ message: "SMS sent successfully" })
+    )
+    .catch((err) => res.status(500).json({ error: err.message }));
 });
 
 server.post("/register", (req, res) => {
@@ -232,7 +258,6 @@ server.post("/register", (req, res) => {
 // });
 
 server.put("/users/:id", (req, res) => {
-  console.log(req.body.role);
   const userId = parseInt(req.params.id);
   const newRole = req.body.role;
 
@@ -245,8 +270,6 @@ server.put("/users/:id", (req, res) => {
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
-
-    console.log("User role before updating:", user.role);
 
     // Update the user
     db.run(
@@ -271,7 +294,6 @@ server.put("/users/:id", (req, res) => {
               return res.status(404).send({ message: "User not found" });
             }
 
-            console.log("User role after:", updatedUser.role);
             res.send(updatedUser);
           }
         );

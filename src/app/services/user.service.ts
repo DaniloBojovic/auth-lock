@@ -1,8 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { LoginResponse } from '../models/login-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -49,16 +57,43 @@ export class UserService {
   login(user: { username: string; password: string }) {
     //return this.http.get<any>('assets/db.json');
     return this.http
-      .post<any>(`${this.apiUrl}/login`, {
+      .post<LoginResponse>(`${this.apiUrl}/login`, {
         username: user.username,
         password: user.password,
       })
       .pipe(
         tap((res) => {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('role', res.role);
+          // new code refactoring
+          this.storeLoginData(res);
+          this.send2FACode(res.code);
+
+          // Old code
+          // localStorage.setItem('token', res.token);
+          // localStorage.setItem('role', res.role);
+          // debugger;
+          // // Send SMS
+          // this.http
+          //   .post(`${this.apiUrl}/send-sms`, {
+          //     phoneNumber: '+381611900174',
+          //     message: `Your 2FA code is ${res.code}`,
+          //   })
+          //   .subscribe();
         })
       );
+  }
+
+  private storeLoginData(res: LoginResponse) {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('role', res.role);
+  }
+
+  private send2FACode(code: number) {
+    const phoneNumber = environment.phoneNumber;
+    const message = `Your 2FA code is ${code}`;
+
+    this.http
+      .post(`${this.apiUrl}/send-sms`, { phoneNumber, message })
+      .subscribe();
   }
 
   logout() {
