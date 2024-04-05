@@ -43,3 +43,6 @@ Thumbs.db
 
 # Database
 users.db
+
+# Environment variables
+.env
