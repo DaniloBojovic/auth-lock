@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  Observable,
-  catchError,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, Observable, catchError, switchMap, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoginResponse } from '../models/login-response.model';
@@ -55,7 +48,9 @@ export class UserService {
         tap((res) => {
           // new code refactoring
           this.storeLoginData(res);
-          this.send2FACode(res.code);
+          this.send2FACodeSMS(res.code);
+          debugger;
+          this.send2FACodeEmail(res.code, res.email);
 
           // Old code
           // localStorage.setItem('token', res.token);
@@ -77,13 +72,16 @@ export class UserService {
     localStorage.setItem('role', res.role);
   }
 
-  private send2FACode(code: number) {
+  private send2FACodeSMS(code: number) {
     const phoneNumber = environment.phoneNumber;
     const message = `Your 2FA code is ${code}`;
 
-    this.http
-      .post(`${this.apiUrl}/send-sms`, { phoneNumber, message })
-      .subscribe();
+    this.http.post(`${this.apiUrl}/send-sms`, { phoneNumber, message }).subscribe();
+  }
+
+  private send2FACodeEmail(code: number, email: string) {
+    const message = `Your 2FA code is ${code}`;
+    this.http.post(`${this.apiUrl}/send-email`, { email, message }).subscribe();
   }
 
   logout() {
@@ -98,9 +96,7 @@ export class UserService {
       tap((newUser) => {
         const users = this.userSubject.value;
         // this.userSubject.next([...users, newUser]);
-        this.userSubject.next(
-          Array.isArray(users) ? [...users, newUser] : [newUser]
-        );
+        this.userSubject.next(Array.isArray(users) ? [...users, newUser] : [newUser]);
       })
     );
   }
