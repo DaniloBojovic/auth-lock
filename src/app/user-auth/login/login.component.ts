@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { catchError, of, take } from 'rxjs';
 import { Router } from '@angular/router';
+import { LoginResponse } from 'src/app/models/login-response.model';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +36,8 @@ export class LoginComponent implements OnInit {
           return of(null);
         })
       )
-      .subscribe((res) => {
+      .subscribe((res: LoginResponse | null) => {
+        debugger;
         if (res && res.token) {
           this.router.navigate(['/user-list']);
         }
